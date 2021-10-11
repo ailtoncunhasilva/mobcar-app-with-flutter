@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobcar_app/app/core/const.dart';
+import 'package:mobcar_app/app/pages/showdialog_details_page.dart';
 
 class BasePage extends StatelessWidget {
   final TextStyle style = TextStyle(
@@ -21,15 +22,47 @@ class BasePage extends StatelessWidget {
       ),
       body: Column(
         children: [
+          Container(
+            padding: const EdgeInsets.only(
+                top: kSpacing, left: kSpacing, right: kSpacing),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Title 1',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            )),
+                        Padding(
+                          padding: const EdgeInsets.only(top: kSpacing / 2),
+                          child: Text('Title 2'),
+                        ),
+                      ],
+                    ),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text('Add now'),
+                    ),
+                  ],
+                ),
+                Divider(color: kPrimaryColor),
+              ],
+            ),
+          ),
           Expanded(
             child: ListView.separated(
-              padding: const EdgeInsets.symmetric(
-                  vertical: kSpacing / 2, horizontal: kSpacing),
+              padding: const EdgeInsets.symmetric(horizontal: kSpacing),
               separatorBuilder: (BuildContext context, int index) =>
                   const Divider(color: kPrimaryColor),
               itemCount: 10,
               itemBuilder: (_, index) {
-                return _buildCarItem();
+                return _buildCarItem(context);
               },
             ),
           ),
@@ -44,7 +77,7 @@ class BasePage extends StatelessWidget {
     );
   }
 
-  Widget _buildCarItem() {
+  Widget _buildCarItem(context) {
     //this widget build list of cars to rent.
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: kSpacing / 2),
@@ -54,9 +87,11 @@ class BasePage extends StatelessWidget {
           height: 50,
           width: 50,
           decoration: BoxDecoration(
-            //color: kAccentColor,
             borderRadius: BorderRadius.circular(8.0),
-            image: DecorationImage(image: AssetImage('images/imagecar.jpg'), fit: BoxFit.cover),
+            image: DecorationImage(
+              image: AssetImage('images/imagecar.jpg'),
+              fit: BoxFit.cover,
+            ),
           ),
         ),
         title: Text('Title'),
@@ -65,7 +100,8 @@ class BasePage extends StatelessWidget {
           children: [
             Text('Subtitle'),
             InkWell(
-              onTap: () {},
+              onTap: () => showDialog(
+                  context: context, builder: (_) => ShowDialogDetailsPage()),
               child: Text('View More', style: style),
             ),
           ],
