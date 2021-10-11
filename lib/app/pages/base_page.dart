@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobcar_app/app/core/const.dart';
+import 'package:mobcar_app/app/pages/showdialog_add_car.dart';
 import 'package:mobcar_app/app/pages/showdialog_details_page.dart';
 
 class BasePage extends StatelessWidget {
@@ -46,7 +47,7 @@ class BasePage extends StatelessWidget {
                       ],
                     ),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () => showDialog(context: context, builder: (_) => ShowDialogAddCar()),
                       child: Text('Add now'),
                     ),
                   ],
