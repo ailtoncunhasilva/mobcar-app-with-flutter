@@ -56,14 +56,9 @@ class ContentShowDialogWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                //_buildTitleCarWithCloseButton(context),
-                //_buildImageCar(),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: kSpacing),
                   child: footer,
-                  // child: Column(
-                  //   children: [],
-                  // ),
                 ),
               ],
             ),

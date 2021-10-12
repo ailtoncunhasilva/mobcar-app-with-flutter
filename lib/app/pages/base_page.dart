@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobcar_app/app/core/const.dart';
 import 'package:mobcar_app/app/pages/showdialog_add_car.dart';
 import 'package:mobcar_app/app/pages/showdialog_details_page.dart';
+import 'package:mobcar_app/app/shared/widgets/elevated_button_widget.dart';
 
 class BasePage extends StatelessWidget {
   final TextStyle style = TextStyle(
@@ -12,50 +13,12 @@ class BasePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // leading: Column(
-        //   children: [
-        //     Icon(Icons.circle),
-        //     Text('MOBCAR', style: style),
-        //   ],
-        // ),
         title: Text('MOBCAR', style: style),
         centerTitle: true,
       ),
       body: Column(
         children: [
-          Container(
-            padding: const EdgeInsets.only(
-                top: kSpacing, left: kSpacing, right: kSpacing),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Title 1',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            )),
-                        Padding(
-                          padding: const EdgeInsets.only(top: kSpacing / 2),
-                          child: Text('Title 2'),
-                        ),
-                      ],
-                    ),
-                    ElevatedButton(
-                      onPressed: () => showDialog(context: context, builder: (_) => ShowDialogAddCar()),
-                      child: Text('Add now'),
-                    ),
-                  ],
-                ),
-                Divider(color: kPrimaryColor),
-              ],
-            ),
-          ),
+          _buildTitleWithAddButton(context),
           Expanded(
             child: ListView.separated(
               padding: const EdgeInsets.symmetric(horizontal: kSpacing),
@@ -78,6 +41,43 @@ class BasePage extends StatelessWidget {
     );
   }
 
+  Widget _buildTitleWithAddButton(context) {
+    return Container(
+      padding:
+          const EdgeInsets.only(top: kSpacing, left: kSpacing, right: kSpacing),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Title 1',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      )),
+                  Padding(
+                    padding: const EdgeInsets.only(top: kSpacing / 2),
+                    child: Text('Title 2'),
+                  ),
+                ],
+              ),
+              ElevatedButtonWidget(
+                onPressed: () => showDialog(
+                    context: context, builder: (_) => ShowDialogAddCar()),
+                text: 'Add now',
+              ),
+            ],
+          ),
+          Divider(color: kPrimaryColor),
+        ],
+      ),
+    );
+  }
+
   Widget _buildCarItem(context) {
     //this widget build list of cars to rent.
     return Padding(
@@ -95,7 +95,7 @@ class BasePage extends StatelessWidget {
             ),
           ),
         ),
-        title: Text('Title'),
+        title: Text('Title', style: TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
