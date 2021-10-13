@@ -17,26 +17,7 @@ class ShowDialogAddCarPage extends StatelessWidget {
           _buildDropDownModel(),
           _buildDropDownYear(),
           _buildTextFielValue(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  side: BorderSide(width: 1),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                ),
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text('Cancelar'),
-              ),
-              ElevatedButtonWidget(
-                padding: const EdgeInsets.only(left: kSpacing / 2),
-                text: 'Salvar',
-                onPressed: () {},
-              ),
-            ],
-          ),
+          _buildButtons(context),
         ],
       ),
     );
@@ -100,6 +81,29 @@ class ShowDialogAddCarPage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildButtons(context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            side: BorderSide(width: 1),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text('Cancelar'),
+        ),
+        ElevatedButtonWidget(
+          padding: const EdgeInsets.only(left: kSpacing / 2),
+          text: 'Salvar',
+          onPressed: () {},
+        ),
+      ],
     );
   }
 }

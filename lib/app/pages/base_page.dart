@@ -3,6 +3,7 @@ import 'package:mobcar_app/app/core/const.dart';
 import 'package:mobcar_app/app/pages/showdialog_add_car_page.dart';
 import 'package:mobcar_app/app/pages/showdialog_details_page.dart';
 import 'package:mobcar_app/app/shared/widgets/elevated_button_widget.dart';
+import 'package:mobcar_app/app/shared/widgets/popup_menu_item_widget.dart';
 
 class BasePage extends StatelessWidget {
   final TextStyle style = TextStyle(
@@ -101,15 +102,26 @@ class BasePage extends StatelessWidget {
           children: [
             Text('Subtitle'),
             InkWell(
-              onTap: () => showDialog(
-                  context: context, builder: (_) => ShowDialogDetailsPage()),
+              onTap: () => _showDialogDetail(context),
               child: Text('View More', style: style),
             ),
           ],
         ),
-        trailing: Icon(Icons.more_vert),
+        trailing: PopupMenuItemWidget(
+          onPressedView: () => _showDialogDetail(context),
+          onPressedEdit: () {},
+          onPressedDelete: () {},
+        ),
+        // trailing: IconButton(
+        //   onPressed: () {},
+        //   icon: Icon(Icons.more_vert),
+        // ),
       ),
     );
+  }
+
+  void _showDialogDetail(context) {
+    showDialog(context: context, builder: (_) => ShowDialogDetailsPage());
   }
 
   Widget _builCopyright() {
