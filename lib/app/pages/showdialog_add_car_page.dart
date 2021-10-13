@@ -4,10 +4,13 @@ import 'package:mobcar_app/app/shared/widgets/content_showdialog_widget.dart';
 import 'package:mobcar_app/app/shared/widgets/elevated_button_widget.dart';
 
 class ShowDialogAddCarPage extends StatelessWidget {
+  final controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return ContentShowDialogWidget(
-      padding: const EdgeInsets.only(top: kSpacing, left: kSpacing, right: kSpacing, bottom: kSpacing / 2),
+      padding: const EdgeInsets.only(
+          top: kSpacing, left: kSpacing, right: kSpacing, bottom: kSpacing / 2),
       footer: Column(
         children: [
           _buildDropDownBrand(),
@@ -24,7 +27,7 @@ class ShowDialogAddCarPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () => Navigator.of(context).pop(),
                 child: Text('Cancelar'),
               ),
               ElevatedButtonWidget(
@@ -90,6 +93,7 @@ class ShowDialogAddCarPage extends StatelessWidget {
       child: SizedBox(
         height: 35,
         child: TextFormField(
+          controller: controller,
           decoration: InputDecoration(
             labelText: 'Valor (R\$)',
             border: OutlineInputBorder(),

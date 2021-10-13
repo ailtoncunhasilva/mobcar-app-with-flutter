@@ -9,9 +9,9 @@ class ContentShowDialogWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Material(
-        type: MaterialType.transparency,
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Center(
         child: SingleChildScrollView(
           child: Container(
             width: MediaQuery.of(context).size.width * 0.8,
