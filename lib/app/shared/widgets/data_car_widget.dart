@@ -21,7 +21,7 @@ class DataCarWidget extends StatelessWidget {
     );
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: kSpacing),
+      padding: const EdgeInsets.only(bottom: kSpacing),
       child: Row(
         children: [
           Container(

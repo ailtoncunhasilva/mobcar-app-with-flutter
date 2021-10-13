@@ -3,8 +3,9 @@ import 'package:mobcar_app/app/core/const.dart';
 
 class ContentShowDialogWidget extends StatelessWidget {
   final Widget? footer;
+  final EdgeInsetsGeometry? padding;
 
-  ContentShowDialogWidget({this.footer});
+  ContentShowDialogWidget({this.footer, this.padding});
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +58,7 @@ class ContentShowDialogWidget extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: kSpacing),
+                  padding: padding ?? EdgeInsets.zero,//const EdgeInsets.symmetric(horizontal: kSpacing, vertical: kSpacing),
                   child: footer,
                 ),
               ],

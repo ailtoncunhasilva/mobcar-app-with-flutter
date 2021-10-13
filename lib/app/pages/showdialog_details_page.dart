@@ -8,6 +8,7 @@ class ShowDialogDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ContentShowDialogWidget(
+      padding: const EdgeInsets.symmetric(horizontal: kSpacing, vertical: kSpacing),
       footer: Column(
         children: [
           DataCarWidget(
@@ -23,7 +24,6 @@ class ShowDialogDetailsPage extends StatelessWidget {
             text2Data: '60.000,00',
           ),
           ElevatedButtonWidget(
-            padding: const EdgeInsets.only(bottom: kSpacing),
             onPressed: (){},
             text: 'Reservar',
             minimunSize: Size.fromHeight(40),

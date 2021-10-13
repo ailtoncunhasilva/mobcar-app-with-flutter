@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobcar_app/app/core/const.dart';
-import 'package:mobcar_app/app/pages/showdialog_add_car.dart';
+import 'package:mobcar_app/app/pages/showdialog_add_car_page.dart';
 import 'package:mobcar_app/app/pages/showdialog_details_page.dart';
 import 'package:mobcar_app/app/shared/widgets/elevated_button_widget.dart';
 
@@ -67,7 +67,7 @@ class BasePage extends StatelessWidget {
               ),
               ElevatedButtonWidget(
                 onPressed: () => showDialog(
-                    context: context, builder: (_) => ShowDialogAddCar()),
+                    context: context, builder: (_) => ShowDialogAddCarPage()),
                 text: 'Add now',
               ),
             ],
