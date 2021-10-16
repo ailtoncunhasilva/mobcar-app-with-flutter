@@ -1,18 +1,13 @@
+import 'package:mobcar_app/app/models/car_item.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-final String carItemTable = 'carItemTable';
-final String idColumn = 'idColumn';
-final String imgColumn = 'imgColumn';
-final String nameCarColumn = 'nameCarColumn';
-final String nameModelColumn = 'nameModelColumn';
+class DataBaseService {
+  static final DataBaseService instance = DataBaseService._internal();
 
-class DataCarItem {
-  static final DataCarItem instance = DataCarItem._internal();
+  factory DataBaseService() => instance;
 
-  factory DataCarItem() => instance;
-
-  DataCarItem._internal();
+  DataBaseService._internal();
 
   static Database? _db;
 
@@ -32,7 +27,7 @@ class DataCarItem {
 
     return await openDatabase(path, version: 1, onCreate: (Database db, int version) async {
       await db.execute(
-        'CREATE TABLE $carItemTable($idColumn INTEGER PRIMARY KEY AUTOINCREMENT, $imgColumn TEXT, $nameCarColumn TEXT, $nameModelColumn TEXT)',
+        'CREATE TABLE $carItemTable($idColumn INTEGER PRIMARY KEY AUTOINCREMENT, $imgColumn TEXT, $nameCarColumn TEXT, $nameModelColumn TEXT,)',
       );
     });
   }
@@ -43,10 +38,6 @@ class DataCarItem {
     carItem.id  = await dbCarItem.insert(carItemTable, carItem.toMap());
     return carItem;
   }
-
-  // Future<CarItem> create(CarItem caItem) async{
-  //   final database = await instance.db;
-  // }
 
   Future<CarItem?> getCarItem(int id) async {
     //function to catch a certain "carItem" via id
@@ -79,7 +70,7 @@ class DataCarItem {
   Future<List> getAllCartItens() async {
     //function to get the carItem list
     final dbCarItem = await instance.db;
-    List listMap = await dbCarItem.rawQuery("SELECT * FROM $carItemTable");
+    List listMap = await dbCarItem.rawQuery('SELECT * FROM $carItemTable');
     List<CarItem> listCarItem = [];
     for (Map m in listMap) {
       listCarItem.add(CarItem.fromMap(m));
@@ -88,8 +79,6 @@ class DataCarItem {
     return listCarItem;
   }
 
-  //Future close() async => await _db!.close();
-
   Future close() async{
     final dbCarItem = await instance.db;
 
@@ -97,35 +86,3 @@ class DataCarItem {
   }
 }
 
-class CarItem {
-  int? id;
-  String? img;
-  String? nameCar;
-  String? nameModel;
-
-  CarItem();
-
-  CarItem.fromMap(Map map) {
-    id = map[idColumn];
-    img = map[imgColumn];
-    nameCar = map[nameCarColumn];
-    nameModel = map[nameModelColumn];
-  }
-
-  Map<String, dynamic> toMap() {
-    Map<String, dynamic> data = {
-      imgColumn: img,
-      nameCarColumn: nameCar,
-      nameModelColumn: nameModelColumn,
-    };
-    if (id != null) {
-      data[idColumn] = id;
-    }
-    return data;
-  }
-
-  @override
-  String toString() {
-    return "CarItem(id: $id, img: $img, nameCar: $nameCar, nameModel: $nameModel)";
-  }
-}

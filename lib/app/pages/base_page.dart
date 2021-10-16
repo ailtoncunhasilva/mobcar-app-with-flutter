@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobcar_app/app/core/const.dart';
-import 'package:mobcar_app/app/data/car_item_database.dart';
+import 'package:mobcar_app/app/data/database_service.dart';
+import 'package:mobcar_app/app/models/car_item.dart';
 import 'package:mobcar_app/app/pages/showdialog_add_car_page.dart';
 import 'package:mobcar_app/app/pages/showdialog_details_page.dart';
 import 'package:mobcar_app/app/shared/widgets/elevated_button_widget.dart';
@@ -16,15 +17,15 @@ class _BasePageState extends State<BasePage> {
     color: kAccentColor,
   );
 
-  DataCarItem dataCarItem = DataCarItem();
+  DataBaseService dataCarItem = DataBaseService();
 
   @override
   void initState() {
     super.initState();
 
     // CarItem car = CarItem();
-    // car.nameCar = 'Ford';
-    // car.nameModel = 'Focus';
+    // car.nameCar = 'Chevrolet';
+    // car.nameModel = 'Onix';
     // car.img = 'imgTest';
 
     // dataCarItem.saveCarItem(car);
