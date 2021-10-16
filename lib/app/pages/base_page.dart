@@ -1,14 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:mobcar_app/app/core/const.dart';
+import 'package:mobcar_app/app/data/car_item_database.dart';
 import 'package:mobcar_app/app/pages/showdialog_add_car_page.dart';
 import 'package:mobcar_app/app/pages/showdialog_details_page.dart';
 import 'package:mobcar_app/app/shared/widgets/elevated_button_widget.dart';
 import 'package:mobcar_app/app/shared/widgets/popup_menu_item_widget.dart';
 
-class BasePage extends StatelessWidget {
+class BasePage extends StatefulWidget {
+  @override
+  _BasePageState createState() => _BasePageState();
+}
+
+class _BasePageState extends State<BasePage> {
   final TextStyle style = TextStyle(
     color: kAccentColor,
   );
+
+  DataCarItem dataCarItem = DataCarItem();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // CarItem car = CarItem();
+    // car.nameCar = 'Ford';
+    // car.nameModel = 'Focus';
+    // car.img = 'imgTest';
+
+    // dataCarItem.saveCarItem(car);
+
+    dataCarItem.getAllCartItens().then((value){
+      print(value);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,10 +136,6 @@ class BasePage extends StatelessWidget {
           onPressedEdit: () {},
           onPressedDelete: () {},
         ),
-        // trailing: IconButton(
-        //   onPressed: () {},
-        //   icon: Icon(Icons.more_vert),
-        // ),
       ),
     );
   }
