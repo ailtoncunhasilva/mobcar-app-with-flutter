@@ -3,12 +3,16 @@ final String idColumn = 'idColumn';
 final String imgColumn = 'imgColumn';
 final String nameCarColumn = 'nameCarColumn';
 final String nameModelColumn = 'nameModelColumn';
+final String yearColumn = 'yearColumn';
+final String valueColumn = 'valueColumn';
 
 class CarItem {
   int? id;
   String? img;
   String? nameCar;
   String? nameModel;
+  String? year;
+  String? value;
 
   CarItem();
 
@@ -17,6 +21,8 @@ class CarItem {
     img = map[imgColumn];
     nameCar = map[nameCarColumn];
     nameModel = map[nameModelColumn];
+    year = map[yearColumn];
+    value = map[valueColumn];
   }
 
   Map<String, dynamic> toMap() {
@@ -24,6 +30,8 @@ class CarItem {
       imgColumn: img,
       nameCarColumn: nameCar,
       nameModelColumn: nameModel,
+      yearColumn: year,
+      valueColumn: value,
     };
     if (id != null) {
       data[idColumn] = id;
@@ -33,6 +41,6 @@ class CarItem {
 
   @override
   String toString() {
-    return "CarItem(id: $id, img: $img, nameCar: $nameCar, nameModel: $nameModel)";
+    return "CarItem(id: $id, img: $img, nameCar: $nameCar, nameModel: $nameModel, year: $year, value: $value)";
   }
 }

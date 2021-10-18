@@ -6,6 +6,7 @@ import 'package:mobcar_app/app/pages/showdialog_add_car_page.dart';
 import 'package:mobcar_app/app/pages/showdialog_details_page.dart';
 import 'package:mobcar_app/app/shared/widgets/elevated_button_widget.dart';
 import 'package:mobcar_app/app/shared/widgets/popup_menu_item_widget.dart';
+import 'package:provider/provider.dart';
 
 class BasePage extends StatefulWidget {
   @override
@@ -24,13 +25,15 @@ class _BasePageState extends State<BasePage> {
     super.initState();
 
     // CarItem car = CarItem();
-    // car.nameCar = 'Chevrolet';
-    // car.nameModel = 'Onix';
+    // car.nameCar = 'Ford';
+    // car.nameModel = 'EcoSport';
     // car.img = 'imgTest';
+    // car.year = '2019';
+    // car.value = '120.000,00';
 
     // dataCarItem.saveCarItem(car);
 
-    dataCarItem.getAllCartItens().then((value){
+    dataCarItem.getAllCartItens().then((value) {
       print(value);
     });
   }
@@ -45,17 +48,19 @@ class _BasePageState extends State<BasePage> {
       body: Column(
         children: [
           _buildTitleWithAddButton(context),
-          Expanded(
-            child: ListView.separated(
-              padding: const EdgeInsets.symmetric(horizontal: kSpacing),
-              separatorBuilder: (BuildContext context, int index) =>
-                  const Divider(color: kPrimaryColor),
-              itemCount: 10,
-              itemBuilder: (_, index) {
-                return _buildCarItem(context);
-              },
-            ),
-          ),
+          Consumer<DataBaseService>(builder: (_, databaseService, __) {
+            return Expanded(
+              child: ListView.separated(
+                padding: const EdgeInsets.symmetric(horizontal: kSpacing),
+                separatorBuilder: (BuildContext context, int index) =>
+                    const Divider(color: kPrimaryColor),
+                itemCount: databaseService.listCarItem.length,
+                itemBuilder: (_, index) {
+                  return _buildCarItem(context, databaseService.listCarItem[index]);
+                },
+              ),
+            );
+          }),
           Container(
             color: kPrimaryColor,
             height: MediaQuery.of(context).size.height * 0.08,
@@ -104,7 +109,7 @@ class _BasePageState extends State<BasePage> {
     );
   }
 
-  Widget _buildCarItem(context) {
+  Widget _buildCarItem(BuildContext context, CarItem carItem) {
     //this widget build list of cars to rent.
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: kSpacing / 2),
@@ -121,28 +126,32 @@ class _BasePageState extends State<BasePage> {
             ),
           ),
         ),
-        title: Text('Title', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(carItem.nameCar ?? '', style: TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Subtitle'),
+            Text(carItem.nameModel ?? ''),
             InkWell(
-              onTap: () => _showDialogDetail(context),
+              onTap: () => _showDialogDetail(carItem),
               child: Text('View More', style: style),
             ),
           ],
         ),
         trailing: PopupMenuItemWidget(
-          onPressedView: () => _showDialogDetail(context),
-          onPressedEdit: () {},
+          onPressedView: () => _showDialogDetail(carItem),
+          onPressedEdit: () => _showDialogAddEditCar(carItem: carItem),
           onPressedDelete: () {},
         ),
       ),
     );
   }
 
-  void _showDialogDetail(context) {
-    showDialog(context: context, builder: (_) => ShowDialogDetailsPage());
+  void _showDialogDetail(CarItem carItem) {
+    showDialog(context: context, builder: (_) => ShowDialogDetailsPage(carItem));
+  }
+
+  void _showDialogAddEditCar({CarItem? carItem}){
+    showDialog(context: context, builder: (_) => ShowDialogAddCarPage(carItem: carItem));
   }
 
   Widget _builCopyright() {
