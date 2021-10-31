@@ -20,23 +20,23 @@ class _BasePageState extends State<BasePage> {
 
   DataBaseService dataCarItem = DataBaseService();
 
-  @override
-  void initState() {
-    super.initState();
+  // @override
+  // void initState() {
+  //   super.initState();
 
-    // CarItem car = CarItem();
-    // car.nameCar = 'Ford';
-    // car.nameModel = 'EcoSport';
-    // car.img = 'imgTest';
-    // car.year = '2019';
-    // car.value = '120.000,00';
+  // CarItem car = CarItem();
+  // car.nameCar = 'Ford';
+  // car.nameModel = 'EcoSport';
+  // car.img = 'imgTest';
+  // car.year = '2019';
+  // car.value = '120.000,00';
 
-    // dataCarItem.saveCarItem(car);
+  // dataCarItem.saveCarItem(car);
 
-    dataCarItem.getAllCartItens().then((value) {
-      print(value);
-    });
-  }
+  //   dataCarItem.getAllCartItens().then((value) {
+  //     print(value);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -47,20 +47,20 @@ class _BasePageState extends State<BasePage> {
       ),
       body: Column(
         children: [
-          _buildTitleWithAddButton(context),
-          Consumer<DataBaseService>(builder: (_, databaseService, __) {
-            return Expanded(
-              child: ListView.separated(
+          _buildTitleWithAddButton(),
+          Expanded(
+            child: Consumer<DataBaseService>(builder: (_, databaseService, __) {
+              return ListView.separated(
                 padding: const EdgeInsets.symmetric(horizontal: kSpacing),
                 separatorBuilder: (BuildContext context, int index) =>
                     const Divider(color: kPrimaryColor),
                 itemCount: databaseService.listCarItem.length,
-                itemBuilder: (_, index) {
+                itemBuilder: (context, index) {
                   return _buildCarItem(context, databaseService.listCarItem[index]);
                 },
-              ),
-            );
-          }),
+              );
+            }),
+          ),
           Container(
             color: kPrimaryColor,
             height: MediaQuery.of(context).size.height * 0.08,
@@ -72,7 +72,9 @@ class _BasePageState extends State<BasePage> {
     );
   }
 
-  Widget _buildTitleWithAddButton(context) {
+  Widget _buildTitleWithAddButton() {
+    var carItemDatabase = context.read<DataBaseService>();
+
     return Container(
       padding:
           const EdgeInsets.only(top: kSpacing, left: kSpacing, right: kSpacing),
@@ -97,8 +99,9 @@ class _BasePageState extends State<BasePage> {
                 ],
               ),
               ElevatedButtonWidget(
-                onPressed: () => showDialog(
-                    context: context, builder: (_) => ShowDialogAddCarPage()),
+                // onPressed: () => showDialog(
+                //     context: context, builder: (_) => ShowDialogAddCarPage()),
+                onPressed: () => carItemDatabase.showDialogAddEditCar(context),
                 text: 'Add now',
               ),
             ],
@@ -111,6 +114,8 @@ class _BasePageState extends State<BasePage> {
 
   Widget _buildCarItem(BuildContext context, CarItem carItem) {
     //this widget build list of cars to rent.
+    var carItemDatabase = context.read<DataBaseService>();
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: kSpacing / 2),
       child: ListTile(
@@ -126,7 +131,8 @@ class _BasePageState extends State<BasePage> {
             ),
           ),
         ),
-        title: Text(carItem.nameCar ?? '', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(carItem.nameCar ?? '',
+            style: TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -139,7 +145,7 @@ class _BasePageState extends State<BasePage> {
         ),
         trailing: PopupMenuItemWidget(
           onPressedView: () => _showDialogDetail(carItem),
-          onPressedEdit: () => _showDialogAddEditCar(carItem: carItem),
+          onPressedEdit: () => carItemDatabase.showDialogAddEditCar(context, carItem: carItem),
           onPressedDelete: () {},
         ),
       ),
@@ -147,11 +153,25 @@ class _BasePageState extends State<BasePage> {
   }
 
   void _showDialogDetail(CarItem carItem) {
-    showDialog(context: context, builder: (_) => ShowDialogDetailsPage(carItem));
+    showDialog(
+        context: context, builder: (_) => ShowDialogDetailsPage(carItem));
   }
 
-  void _showDialogAddEditCar({CarItem? carItem}){
-    showDialog(context: context, builder: (_) => ShowDialogAddCarPage(carItem: carItem));
+  void _showDialogAddEditCar({CarItem? carItem}) async {
+    var carItemDatabase = context.read<DataBaseService>();
+
+    final retCarItem = await showDialog(
+        context: context,
+        builder: (_) => ShowDialogAddCarPage(carItem: carItem));
+
+    if (retCarItem != null) {
+      if (carItem != null) {
+        await carItemDatabase.update(retCarItem);
+      } else {
+        await carItemDatabase.saveCarItem(retCarItem);
+      }
+      carItemDatabase.getAllCartItens();
+    } 
   }
 
   Widget _builCopyright() {

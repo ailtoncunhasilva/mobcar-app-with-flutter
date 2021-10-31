@@ -15,9 +15,16 @@ class ShowDialogAddCarPage extends StatefulWidget {
 
 class _ShowDialogAddCarPageState extends State<ShowDialogAddCarPage> {
   final _valueController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
+  final _brandFocus = FocusNode();
 
   bool _carEdited = false;
   CarItem? _editedCarItem;
+
+  String? brandSelected;
+  String? modelSelected;
+  String? yearSelected;
 
   @override
   void initState() {
@@ -28,6 +35,9 @@ class _ShowDialogAddCarPageState extends State<ShowDialogAddCarPage> {
     } else {
       _editedCarItem = CarItem.fromMap(widget.carItem!.toMap());
 
+      brandSelected = _editedCarItem!.nameCar!;
+      modelSelected = _editedCarItem!.nameModel!;
+      yearSelected = _editedCarItem!.year!;
       _valueController.text = _editedCarItem!.value!;
     }
   }
@@ -50,11 +60,10 @@ class _ShowDialogAddCarPageState extends State<ShowDialogAddCarPage> {
   }
 
   Widget _buildDropDownBrand() {
-    String? brandSelected;
     List<String> brandList = ['Ford', 'Chevrolet', 'Volkswagen'];
 
-    return SizedBox(
-      height: 35,
+    return Container(
+      height: 38,
       child: DropdownButtonFormField(
         items: brandList.map((e) {
           return DropdownMenuItem(
@@ -68,19 +77,21 @@ class _ShowDialogAddCarPageState extends State<ShowDialogAddCarPage> {
           border: OutlineInputBorder(),
           contentPadding: const EdgeInsets.symmetric(horizontal: kSpacing),
         ),
-        onChanged: (value) => setState(() => brandSelected = value.toString()),
+        onChanged: (value) => _editedCarItem!.nameCar = value.toString(),
+        focusNode: _brandFocus,
+        validator: (text) => (text == null) ? 'Campo obrigatório' : null,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
       ),
     );
   }
 
   Widget _buildDropDownModel() {
-    String? modelSelected;
-    List<String> modelList = ['EcoSport', 'Onix Sedan', 'Amarok'];
+    List<String> modelList = ['EcoSport', 'Cobalt', 'Amarok'];
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: kSpacing),
-      child: SizedBox(
-        height: 35,
+      child: Container(
+        height: 38,
         child: DropdownButtonFormField(
           items: modelList.map((e) {
             return DropdownMenuItem(
@@ -94,19 +105,19 @@ class _ShowDialogAddCarPageState extends State<ShowDialogAddCarPage> {
             border: OutlineInputBorder(),
             contentPadding: const EdgeInsets.symmetric(horizontal: kSpacing),
           ),
-          onChanged: (value) =>
-              setState(() => modelSelected = value.toString()),
+          onChanged: (value) => _editedCarItem!.nameModel = value.toString(),
+          validator: (text) => (text == null) ? 'Campo obrigatório' : null,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
         ),
       ),
     );
   }
 
   Widget _buildDropDownYear() {
-    String? yearSelected;
-    List<String> yearList = ['2018', '2020', '2016'];
+    List<String> yearList = ['2021', '2019', '2016', '2018'];
 
-    return SizedBox(
-      height: 35,
+    return Container(
+      height: 38,
       child: DropdownButtonFormField(
         items: yearList.map((e) {
           return DropdownMenuItem(
@@ -120,7 +131,9 @@ class _ShowDialogAddCarPageState extends State<ShowDialogAddCarPage> {
           border: OutlineInputBorder(),
           contentPadding: const EdgeInsets.symmetric(horizontal: kSpacing),
         ),
-        onChanged: (value) => setState(() => yearSelected = value.toString()),
+        onChanged: (value) => _editedCarItem!.year = value.toString(),
+        validator: (text) => (text == null) ? 'Campo obrigatório' : null,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
       ),
     );
   }
@@ -128,8 +141,8 @@ class _ShowDialogAddCarPageState extends State<ShowDialogAddCarPage> {
   Widget _buildTextFielValue() {
     return Padding(
       padding: const EdgeInsets.only(top: kSpacing, bottom: kSpacing / 2),
-      child: SizedBox(
-        height: 35,
+      child: Container(
+        height: 38,
         child: TextFormField(
           controller: _valueController,
           decoration: InputDecoration(
@@ -138,7 +151,7 @@ class _ShowDialogAddCarPageState extends State<ShowDialogAddCarPage> {
           ),
           onChanged: (text) {
             _carEdited = true;
-            _editedCarItem?.value = text;
+            _editedCarItem!.value = text;
           },
         ),
       ),
@@ -162,7 +175,12 @@ class _ShowDialogAddCarPageState extends State<ShowDialogAddCarPage> {
         ElevatedButtonWidget(
           padding: const EdgeInsets.only(left: kSpacing / 2),
           text: 'Salvar',
-          onPressed: () {},
+          onPressed: () {
+            if (_editedCarItem!.nameCar != null &&
+                _editedCarItem!.nameCar!.isNotEmpty) {
+              Navigator.pop(context, _editedCarItem);
+            }
+          },
         ),
       ],
     );
