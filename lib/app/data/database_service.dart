@@ -7,6 +7,7 @@ import 'package:sqflite/sqflite.dart';
 
 class DataBaseService extends ChangeNotifier {
   DataBaseService() {
+    //Function for initializing the item list
     _getAllCartItens();
   }
 
@@ -104,7 +105,7 @@ class DataBaseService extends ChangeNotifier {
   }
 
   void showDialogAddEditCar(BuildContext context, {CarItem? carItem}) async {
-
+  //Showdialog for add or edit an item
     final retCarItem = await showDialog(
         context: context,
         builder: (_) => ShowDialogAddCarPage(carItem: carItem));
@@ -120,7 +121,13 @@ class DataBaseService extends ChangeNotifier {
   }
 
   void _getAllCartItens(){
+    //Function for updating the item list
     getAllCartItens().then((value) => listCarItem = value as List<CarItem>);
-    notifyListeners();
+  }
+
+  void deleteCarItem(int id){
+    //Function for delete an item
+    delete(id);
+    _getAllCartItens();
   }
 }

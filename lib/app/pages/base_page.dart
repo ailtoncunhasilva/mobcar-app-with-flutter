@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mobcar_app/app/core/const.dart';
 import 'package:mobcar_app/app/data/database_service.dart';
 import 'package:mobcar_app/app/models/car_item.dart';
-import 'package:mobcar_app/app/pages/showdialog_add_car_page.dart';
 import 'package:mobcar_app/app/pages/showdialog_details_page.dart';
 import 'package:mobcar_app/app/shared/widgets/elevated_button_widget.dart';
 import 'package:mobcar_app/app/shared/widgets/popup_menu_item_widget.dart';
@@ -13,30 +12,12 @@ class BasePage extends StatefulWidget {
   _BasePageState createState() => _BasePageState();
 }
 
-class _BasePageState extends State<BasePage> {
+class _BasePageState extends State<BasePage> with ChangeNotifier {
   final TextStyle style = TextStyle(
     color: kAccentColor,
   );
 
   DataBaseService dataCarItem = DataBaseService();
-
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  // CarItem car = CarItem();
-  // car.nameCar = 'Ford';
-  // car.nameModel = 'EcoSport';
-  // car.img = 'imgTest';
-  // car.year = '2019';
-  // car.value = '120.000,00';
-
-  // dataCarItem.saveCarItem(car);
-
-  //   dataCarItem.getAllCartItens().then((value) {
-  //     print(value);
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +37,8 @@ class _BasePageState extends State<BasePage> {
                     const Divider(color: kPrimaryColor),
                 itemCount: databaseService.listCarItem.length,
                 itemBuilder: (context, index) {
-                  return _buildCarItem(context, databaseService.listCarItem[index]);
+                  return _buildCarItem(
+                      context, databaseService.listCarItem[index]);
                 },
               );
             }),
@@ -87,22 +69,20 @@ class _BasePageState extends State<BasePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Title 1',
+                  Text('Aluguel de Veículos',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       )),
                   Padding(
                     padding: const EdgeInsets.only(top: kSpacing / 2),
-                    child: Text('Title 2'),
+                    child: Text('Veículos disponíveis'),
                   ),
                 ],
               ),
               ElevatedButtonWidget(
-                // onPressed: () => showDialog(
-                //     context: context, builder: (_) => ShowDialogAddCarPage()),
                 onPressed: () => carItemDatabase.showDialogAddEditCar(context),
-                text: 'Add now',
+                text: 'Adicionar veículo',
               ),
             ],
           ),
@@ -139,39 +119,22 @@ class _BasePageState extends State<BasePage> {
             Text(carItem.nameModel ?? ''),
             InkWell(
               onTap: () => _showDialogDetail(carItem),
-              child: Text('View More', style: style),
+              child: Text('Ver mais', style: style),
             ),
           ],
         ),
         trailing: PopupMenuItemWidget(
           onPressedView: () => _showDialogDetail(carItem),
-          onPressedEdit: () => carItemDatabase.showDialogAddEditCar(context, carItem: carItem),
-          onPressedDelete: () {},
+          onPressedEdit: () =>
+              carItemDatabase.showDialogAddEditCar(context, carItem: carItem),
+          onPressedDelete: () {
+            carItemDatabase.deleteCarItem(carItem.id!);
+            Navigator.pop(context);
+            snackBar(text: 'Veículo deletado com sucesso!', color: Colors.redAccent);
+          },
         ),
       ),
     );
-  }
-
-  void _showDialogDetail(CarItem carItem) {
-    showDialog(
-        context: context, builder: (_) => ShowDialogDetailsPage(carItem));
-  }
-
-  void _showDialogAddEditCar({CarItem? carItem}) async {
-    var carItemDatabase = context.read<DataBaseService>();
-
-    final retCarItem = await showDialog(
-        context: context,
-        builder: (_) => ShowDialogAddCarPage(carItem: carItem));
-
-    if (retCarItem != null) {
-      if (carItem != null) {
-        await carItemDatabase.update(retCarItem);
-      } else {
-        await carItemDatabase.saveCarItem(retCarItem);
-      }
-      carItemDatabase.getAllCartItens();
-    } 
   }
 
   Widget _builCopyright() {
@@ -190,5 +153,20 @@ class _BasePageState extends State<BasePage> {
         ),
       ],
     );
+  }
+
+  void _showDialogDetail(CarItem carItem) {
+    showDialog(
+        context: context, builder: (_) => ShowDialogDetailsPage(carItem));
+  }
+
+  void snackBar({text, color}) {
+    final snackBar = SnackBar(
+      content: Text(text, textAlign: TextAlign.center),
+      backgroundColor: color,
+      elevation: 8,
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

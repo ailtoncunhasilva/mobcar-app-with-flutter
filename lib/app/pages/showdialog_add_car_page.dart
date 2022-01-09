@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:mobcar_app/app/core/const.dart';
+import 'package:mobcar_app/app/data/api_service/service_brand_car.dart';
+import 'package:mobcar_app/app/data/api_service/service_model_car.dart';
+import 'package:mobcar_app/app/data/api_service/year_car_service.dart';
 import 'package:mobcar_app/app/models/car_item.dart';
 import 'package:mobcar_app/app/shared/widgets/content_showdialog_widget.dart';
 import 'package:mobcar_app/app/shared/widgets/elevated_button_widget.dart';
+import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class ShowDialogAddCarPage extends StatefulWidget {
   final CarItem? carItem;
 
   ShowDialogAddCarPage({this.carItem});
+
+  String? brandSelected;
+  CarItem? _editedCarItem;
 
   @override
   _ShowDialogAddCarPageState createState() => _ShowDialogAddCarPageState();
@@ -20,9 +28,9 @@ class _ShowDialogAddCarPageState extends State<ShowDialogAddCarPage> {
   final _brandFocus = FocusNode();
 
   bool _carEdited = false;
-  CarItem? _editedCarItem;
+  
 
-  String? brandSelected;
+  //String? brandSelected;
   String? modelSelected;
   String? yearSelected;
 
@@ -31,14 +39,14 @@ class _ShowDialogAddCarPageState extends State<ShowDialogAddCarPage> {
     super.initState();
 
     if (widget.carItem == null) {
-      _editedCarItem = CarItem();
+      widget._editedCarItem = CarItem();
     } else {
-      _editedCarItem = CarItem.fromMap(widget.carItem!.toMap());
+      widget._editedCarItem = CarItem.fromMap(widget.carItem!.toMap());
 
-      brandSelected = _editedCarItem!.nameCar!;
-      modelSelected = _editedCarItem!.nameModel!;
-      yearSelected = _editedCarItem!.year!;
-      _valueController.text = _editedCarItem!.value!;
+      widget.brandSelected = widget._editedCarItem!.nameCar!;
+      modelSelected = widget._editedCarItem!.nameModel!;
+      yearSelected = widget._editedCarItem!.year!;
+      _valueController.text = widget._editedCarItem!.value!;
     }
   }
 
@@ -60,24 +68,23 @@ class _ShowDialogAddCarPageState extends State<ShowDialogAddCarPage> {
   }
 
   Widget _buildDropDownBrand() {
-    List<String> brandList = ['Ford', 'Chevrolet', 'Volkswagen'];
+    final brandCarService = context.read<BrandCarService>();
+
+    final items = brandCarService.brandList
+        .map((e) => DropdownMenuItem(value: e.name, child: Text(e.name ?? '')))
+        .toList();
 
     return Container(
       height: 38,
       child: DropdownButtonFormField(
-        items: brandList.map((e) {
-          return DropdownMenuItem(
-            value: e,
-            child: Text(e),
-          );
-        }).toList(),
-        value: brandSelected,
+        items: items,
+        value: widget.brandSelected,
         decoration: InputDecoration(
           labelText: 'Marca',
           border: OutlineInputBorder(),
           contentPadding: const EdgeInsets.symmetric(horizontal: kSpacing),
         ),
-        onChanged: (value) => _editedCarItem!.nameCar = value.toString(),
+        onChanged: (value) => widget._editedCarItem!.nameCar = value.toString(),
         focusNode: _brandFocus,
         validator: (text) => (text == null) ? 'Campo obrigatório' : null,
         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -86,26 +93,26 @@ class _ShowDialogAddCarPageState extends State<ShowDialogAddCarPage> {
   }
 
   Widget _buildDropDownModel() {
-    List<String> modelList = ['EcoSport', 'Cobalt', 'Amarok'];
+    final modelCarService = context.read<ModelCarService>();
+
+    final items = modelCarService.modelList
+        .map((e) => DropdownMenuItem(value: e.name, child: Text(e.name ?? '')))
+        .toList();
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: kSpacing),
       child: Container(
         height: 38,
         child: DropdownButtonFormField(
-          items: modelList.map((e) {
-            return DropdownMenuItem(
-              value: e,
-              child: Text(e),
-            );
-          }).toList(),
+          isExpanded: true,
+          items: items,
           value: modelSelected,
           decoration: InputDecoration(
             labelText: 'Modelo',
             border: OutlineInputBorder(),
             contentPadding: const EdgeInsets.symmetric(horizontal: kSpacing),
           ),
-          onChanged: (value) => _editedCarItem!.nameModel = value.toString(),
+          onChanged: (value) => widget._editedCarItem!.nameModel = value.toString(),
           validator: (text) => (text == null) ? 'Campo obrigatório' : null,
           autovalidateMode: AutovalidateMode.onUserInteraction,
         ),
@@ -114,24 +121,23 @@ class _ShowDialogAddCarPageState extends State<ShowDialogAddCarPage> {
   }
 
   Widget _buildDropDownYear() {
-    List<String> yearList = ['2021', '2019', '2016', '2018'];
+    final yearCarService = context.read<YearCarService>();
+
+    final items = yearCarService.yearList
+        .map((e) => DropdownMenuItem(value: e.name, child: Text(e.name ?? '')))
+        .toList();
 
     return Container(
       height: 38,
       child: DropdownButtonFormField(
-        items: yearList.map((e) {
-          return DropdownMenuItem(
-            value: e,
-            child: Text(e),
-          );
-        }).toList(),
+        items: items,
         value: yearSelected,
         decoration: InputDecoration(
           labelText: 'Ano',
           border: OutlineInputBorder(),
           contentPadding: const EdgeInsets.symmetric(horizontal: kSpacing),
         ),
-        onChanged: (value) => _editedCarItem!.year = value.toString(),
+        onChanged: (value) => widget._editedCarItem!.year = value.toString(),
         validator: (text) => (text == null) ? 'Campo obrigatório' : null,
         autovalidateMode: AutovalidateMode.onUserInteraction,
       ),
@@ -151,7 +157,7 @@ class _ShowDialogAddCarPageState extends State<ShowDialogAddCarPage> {
           ),
           onChanged: (text) {
             _carEdited = true;
-            _editedCarItem!.value = text;
+            widget._editedCarItem!.value = text;
           },
         ),
       ),
@@ -176,9 +182,9 @@ class _ShowDialogAddCarPageState extends State<ShowDialogAddCarPage> {
           padding: const EdgeInsets.only(left: kSpacing / 2),
           text: 'Salvar',
           onPressed: () {
-            if (_editedCarItem!.nameCar != null &&
-                _editedCarItem!.nameCar!.isNotEmpty) {
-              Navigator.pop(context, _editedCarItem);
+            if (widget._editedCarItem!.nameCar != null &&
+                widget._editedCarItem!.nameCar!.isNotEmpty) {
+              Navigator.pop(context, widget._editedCarItem);
             }
           },
         ),

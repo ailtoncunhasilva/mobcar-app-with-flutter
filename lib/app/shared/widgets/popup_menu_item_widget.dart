@@ -23,21 +23,21 @@ class PopupMenuItemWidget extends StatelessWidget {
             padding: EdgeInsets.only(left: kSpacing),
             child: TextButton(
               onPressed: onPressedView,
-              child: Text('View'),
+              child: Text('Ver mais'),
             ),
           ),
           PopupMenuItem(
             padding: const EdgeInsets.only(left: kSpacing),
             child: TextButton(
               onPressed: onPressedEdit,
-              child: Text('Edit'),
+              child: Text('Editar'),
             ),
           ),
           PopupMenuItem(
             padding: const EdgeInsets.symmetric(horizontal: kSpacing),
             child: TextButton(
               onPressed: onPressedDelete,
-              child: Text('Delete'),
+              child: Text('Deletar'),
             ),
           ),
         ];

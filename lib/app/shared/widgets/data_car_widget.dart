@@ -29,13 +29,16 @@ class DataCarWidget extends StatelessWidget {
             child: Row(
               children: [
                 Text(text1, style: style),
-                Padding(
-                  padding: const EdgeInsets.only(left: kSpacing / 2),
-                  child: Text(text1Data),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: kSpacing / 2),
+                    child: Text(text1Data),
+                  ),
                 ),
               ],
             ),
           ),
+          SizedBox(width: kSpacing / 2),
           Expanded(
             child: Container(
               child: Row(
