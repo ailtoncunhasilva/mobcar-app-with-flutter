@@ -15,10 +15,22 @@ class ModelCarService extends ChangeNotifier{
 
   List<ModelsCars> modelList = [];
 
-  String? codeValue;
+  int? codeValue;
+
+  List<ModelsCars> get modelsCar{
+    final List<ModelsCars> modelsCars = [];
+
+    if(codeValue != null){
+      // ignore: unrelated_type_equality_checks
+      modelsCars.addAll(modelList.where((e) => e.code == codeValue.toString()));
+    }
+    return modelsCar;
+  }
 
   Future<void> getModels() async{
-    var url = Uri.parse('https://parallelum.com.br/fipe/api/v1/carros/marcas/59/modelos');
+    // codeValue = showDialogAddCarPage?.carItem?.value;
+    var url = Uri.parse('https://parallelum.com.br/fipe/api/v1/carros/marcas/$codeValue/modelos');
+    //https://parallelum.com.br/fipe/api/v1/carros/marcas/59/modelos
 
     final response = await http.get(url);
     Iterable list = json.decode(response.body)['modelos'];

@@ -67,7 +67,7 @@ class _ShowDialogAddCarPageState extends State<ShowDialogAddCarPage> {
     );
   }
 
-  Widget _buildDropDownBrand() {
+  Widget _buildDropDownBrand(){
     final brandCarService = context.read<BrandCarService>();
 
     final items = brandCarService.brandList
@@ -95,7 +95,7 @@ class _ShowDialogAddCarPageState extends State<ShowDialogAddCarPage> {
   Widget _buildDropDownModel() {
     final modelCarService = context.read<ModelCarService>();
 
-    final items = modelCarService.modelList
+    final items = modelCarService.modelsCar
         .map((e) => DropdownMenuItem(value: e.name, child: Text(e.name ?? '')))
         .toList();
 
